@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 
 app = Flask(__name__)
 
@@ -8,11 +8,11 @@ def home():
 
 @app.route("/signin")
 def signin():
-    return "Signin page"
+    return render_template("signin.html")
 
 @app.route("/signup")
 def signup():
-    return "Signup page"
+    return render_template("signup.html")
 
 if __name__ == "__main__":
     app.run()
