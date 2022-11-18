@@ -3,5 +3,11 @@
 Sign Up
 {% endblock %}
 {% block body %}
-Signup form
+<form action="/signup" method="post">
+    <p><input name="name" placeholder="Full name"></p>
+    <p><input name="email" placeholder="email"></p>
+    <p><input name="username" placeholder="username"></p>
+    <p><input name="password" type="password" placeholder="password"></p>
+    <p><button type="submit">Sign Up</button></p>
+</form>
 {% endblock %}
