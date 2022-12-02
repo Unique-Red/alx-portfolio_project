@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %} 
+Edit
+{% endblock %} 
+{% block content %}
+<div class="auth">
+  <form method="POST" enctype="multipart/form-data">
+    <div class="form-group">
+      <label for="title">Title</label>
+      <input type="text" class="form-control" id="title" name="title" value="{{title_to_edit.title}}" maxlength="200" required>
+    </div>
+    <br>
+    <div class="form-group">
+      <textarea class="form-control" name="text" id="text" rows="30" required>{{post_to_update.text}}</textarea>
+    </div>
+    <br>
+    <button type="submit" class="btn btn-danger">UPDATE</button>
+  </form>
+</div>
+    {{ ckeditor.load(pkg_type="basic") }}
+    {{ ckeditor.config(name='text') }}
+{% endblock %}

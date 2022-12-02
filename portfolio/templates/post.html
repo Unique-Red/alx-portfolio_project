@@ -1,0 +1,82 @@
+{% extends "base.html" %} {% block title %} {{posts.title}} {% endblock %} {%
+block content %}
+<div class="single-post">
+  <h1 align="center" style="text-transform: uppercase; color: #fff">
+    {{posts.title}}
+  </h1>
+    <div class="post-info">
+      <span class="post-author"
+        >By
+        <a href="/post/{{posts.user.firstname}}"
+          >{{posts.user.firstname}} {{posts.user.lastname}}</a
+        ></span
+      >
+      <span class="post-date">{{posts.date_created.strftime('%B %d, %Y')}}</span>
+    </div>
+    <div class="post-content">
+      <p>{{posts.text|safe}}</p>
+    </div>
+    <div class="react post">
+      {% if current_user.is_authenticated %} 
+      <div style="display:flex;">
+          {{ posts.reacts|length }} 
+          {% if user.id in posts.reacts|map(attribute="author")|list %}
+        <a id="react3" href="/react/{{posts.id}}"><i class="fas fa-heart"></i></a>
+        {% else %}
+        <a id="react4" href="/react/{{posts.id}}"><i class="far fa-heart"></i></a>
+        {% endif %} {% if posts.comments|length > 1 %}
+        <p align="center">
+          {{posts.comments|length}} <i class="fa-solid fa-comment"></i>
+        </p>
+        {% elif posts.comments|length == 1 %}
+        <p align="center">
+          {{posts.comments|length}} <i class="fa-solid fa-comment"></i>
+        </p>
+        {% else %}
+        <p align="center">Be the first to Comment</p>
+        {% endif %}
+      </div>
+
+      {% if user.id == posts.author %}
+      <div>
+        <a href="/delete/{{posts.id}}"><i class="fas fa-trash"></i></a>
+        <a style="color: white;text-decoration:underline !important;border-left:1px solid #fff;padding-left:1rem;" href="/edit/{{posts.id}}">Edit</a>
+      </div>
+
+        {% endif %}
+      {% endif %}
+    </div>
+
+  <div class="comment">
+    {% for comment in posts.comments %}
+    <p style="text-align: left">
+      <h5><a id="name" href="/post/{{comment.user.firstname}}"
+        >{{comment.user.firstname}} {{comment.user.lastname}}</a
+      ></h5>
+       {{comment.text}}<br/> 
+       <small style="opacity: 0.8;">{{comment.date_created.strftime('%I:%M%p %B %d, %Y')}}</small>
+      {% if user.id == comment.author or user.id == posts.author %}
+      <a href="/delete-comment/{{comment.id}}"><i class="fas fa-trash"></i></a>
+      {% endif %}
+    </p>
+
+    {% endfor %}
+    <br />
+    {% if current_user.is_authenticated %}
+    <form action="/comment/{{posts.id}}" method="post">
+      <div class="input-group mb-3">
+        <textarea name="comment" id="comment" rows="2" style="width: 100%;" placeholder="Write comment"></textarea>
+        <br>
+        <button class="btn btn-outline-danger" style="padding-top: 10px;" type="submit" id="button-addon2">
+          Comment
+        </button>
+      </div>
+    </form>
+    {% else %}
+    <p style="text-align: center;">
+      <a href="{{url_for('login')}}" style="color: red;">Login to react/comment</a>
+    </p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

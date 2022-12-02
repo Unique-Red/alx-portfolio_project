@@ -1,0 +1,60 @@
+{% extends "base.html" %} {% block title %} Home {% endblock %} {% block header
+%}  {% endblock %} {% block content %} {% for post in posts %}
+  <div class="col-md-5 col-sm-12 card text-center">
+    <div class="card-header">
+  
+      
+    </div>
+    <div class="card-body">
+      <h5 class="card-title">
+        <a>{{post.title}}</a>
+      </h5>
+    </div>
+    <div class="card-footer text-muted">
+      <a id="read" href="{{url_for('single_post', id=post.id)}}">Read More</a>
+      {% for comment in post.comments[-1:] %}
+      <p style="text-align: left">
+        <a href="/post/{{comment.user.firstname}}"
+          >{{comment.user.firstname}} {{comment.user.lastname}}</a
+        >: {{comment.text}} {{comment.date_created.strftime('%I:%M%p %B %d,
+        %Y')}} {% if user.id == comment.author or user.id == post.author %}
+        <a href="/delete-comment/{{comment.id}}"
+          ><i class="fas fa-trash"></i
+        ></a>
+        {% endif %}
+      </p>
+
+      {% endfor %}
+      <div class="react">
+        {% if current_user.is_authenticated %}
+        <p>
+          {{ post.reacts|length }} {% if user.id in
+          post.reacts|map(attribute="author")|list %}
+          <i class="fas fa-heart"></i>
+          {% else %}
+          <i class="far fa-heart"></i>
+          {% endif %}
+        </p>
+          {% if post.comments|length > 1 %}
+          <p>{{post.comments|length}} comments</p>
+          {% elif post.comments|length == 1 %}
+          <p>{{post.comments|length}} comment</p>
+          {% else %}
+          <p>No comments yet</p>
+          {% endif %}
+      {% else %}
+      <a href="{{url_for('login')}}">Login to react/comment</a>
+      {% endif %}
+        <h6>
+          Story by:
+          <a href="/post/{{post.user.firstname}}">
+            {{ post.user.firstname }} {{ post.user.lastname }}
+          </a>
+          on {{ post.date_created.strftime('%B %d, %Y') }}
+        </h6>
+      </div>
+      
+    </div>
+  </div>
+<br />
+{% endfor %} {% endblock %}
