@@ -4,6 +4,7 @@ from .models import User, Post, React, Comment
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_ckeditor import CKEditor
+from datetime import datetime
 
 ckeditor = CKEditor()
 
@@ -11,13 +12,13 @@ ckeditor = CKEditor()
 @app.route("/")
 def home():
     posts = Post.query.order_by(Post.date_created.desc()).all()
-    return render_template("home.html", posts=posts, user=current_user)
+    return render_template("home.html", posts=posts, user=current_user, date=datetime.now())
 
 
 @app.route("/post/<int:id>")
 def single_post(id):
     posts = Post.query.get_or_404(id)
-    return render_template ("post.html", posts=posts, user=current_user)
+    return render_template ("post.html", posts=posts, user=current_user, date=datetime.now())
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -36,7 +37,7 @@ def login():
             flash("Email does not exist.", category="error")
 
         
-    return render_template("login.html", user=current_user)
+    return render_template("login.html", user=current_user, date=datetime.now())
 
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
@@ -63,7 +64,7 @@ def signup():
             login_user(new_user)
             return redirect(url_for("create_post"))
             
-    return render_template("register.html", user=current_user)
+    return render_template("register.html", user=current_user, date=datetime.now())
 
 @app.route("/logout")
 def logout():
@@ -85,7 +86,7 @@ def create_post():
             flash("Post created!", category="success")
             return redirect(url_for("home"))
 
-    return render_template("create.html", user=current_user)
+    return render_template("create.html", user=current_user, date=datetime.now())
 
 @app.route("/post/<firstname>")
 def post(firstname):
@@ -95,7 +96,7 @@ def post(firstname):
         return redirect(url_for("home"))
 
     posts = user.posts
-    return render_template("posts.html", user=current_user, posts=posts, firstname=firstname)
+    return render_template("posts.html", user=current_user, posts=posts, firstname=firstname, date=datetime.now())
 
 @app.route("/delete/<int:id>")
 @login_required
@@ -122,7 +123,7 @@ def edit(id):
             return redirect(url_for("home"))
         except:
             flash("There was a problem updating that post.", category="error")
-    return render_template("edit.html", post_to_update=post_to_update, title_to_edit=title_to_edit)
+    return render_template("edit.html", post_to_update=post_to_update, title_to_edit=title_to_edit, date=datetime.now())
 
 @app.route("/react/<post_id>")
 @login_required
@@ -153,7 +154,7 @@ def comment(post_id):
         flash("Comment created!", category="success")
         return redirect(url_for("single_post", id=post_id))
 
-    return render_template("home.html", user=current_user)
+    return render_template("home.html", user=current_user, date=datetime.now())
 
 @app.route("/delete-comment/<comment_id>")
 @login_required
@@ -168,4 +169,4 @@ def delete_comment(comment_id):
 
 @app.route("/about")
 def about():
-    return render_template("about.html")
+    return render_template("about.html", date=datetime.now())
