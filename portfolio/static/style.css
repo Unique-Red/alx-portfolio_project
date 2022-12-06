@@ -280,3 +280,24 @@ a#name{
     letter-spacing: 1px;
     font-size: 1.1rem;
 }
+
+@media(max-width:425px) {
+    a.navbar-brand{
+        font-size: 1rem;
+    }
+    .row{
+    margin: 30px;
+    }
+    .socials i {
+        font-size: 1rem;
+        margin: 1rem;
+        border: 1px solid #777;
+        padding: 1rem;
+        border-radius: 50%;
+    }
+    .footer-container p {
+        color: #777;
+        font-weight: 100;
+        letter-spacing: 0;
+    }
+}
